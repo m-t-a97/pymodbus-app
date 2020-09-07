@@ -2,8 +2,10 @@
 # IMPORTS
 # ------------------------------------------------------------------
 
+import os
 from time import sleep
 
+from decouple import config
 from pyModbusTCP.client import ModbusClient
 
 # ------------------------------------------------------------------
@@ -14,7 +16,7 @@ from pyModbusTCP.client import ModbusClient
 
 def main():
 	try:
-		client = ModbusClient("192.168.0.118", 10503)	
+		client = ModbusClient(config("HOST", default = "127.0.0.1"), config("PORT", default = 502, cast = int))
 		print("Client open:", client.open())
 		
 		while True:

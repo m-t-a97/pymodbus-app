@@ -6,6 +6,8 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+ENV PORT=10502
+
 COPY . ./
 
-CMD ["python", "./modbus_client.py"] 
+CMD ["python", "./src/modbus_client.py"] 

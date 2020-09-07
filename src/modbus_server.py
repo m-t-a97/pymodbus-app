@@ -3,6 +3,7 @@
 # ------------------------------------------------------------------
 from time import sleep
 
+from decouple import config
 from pyModbusTCP.server import ModbusServer, DataBank
 
 from serial_reader import SerialReader 
@@ -15,7 +16,7 @@ from serial_reader import SerialReader
 
 def main():
 	try:
-		server = ModbusServer("192.168.0.118", 10503, no_block = True)
+		server = ModbusServer(config("HOST", default = "127.0.0.1"), config("PORT", default = 502, cast = int), no_block = True)
 		server.start()
 		print("Server is online...")
 		
