@@ -16,21 +16,15 @@ class SerialReader:
 	
 	def read_serial_data(self):
 		try:
-			data_read_as_bytes = self.serial.readline()
-			data_converted_from_bytes_to_string = self.convert_bytes_to_string(data_read_as_bytes)	
-			return self.remove_spaced_characters_from_serial_data(data_converted_from_bytes_to_string)		
+			data_as_bytes = self.serial.readline()
+			data_decoded_as_string = data_as_bytes.decode("UTF-8")
+			data_decoded_as_string.replace("\r", "")
+			return data_decoded_as_string
 			
 		except Exception as e:
 			print(e)
 		
 		return ""
-
-	def convert_bytes_to_string(self, bytes):
-		data_to_string = str(bytes.decode("utf-8"))
-		return data_to_string
-		
-	def remove_spaced_characters_from_serial_data(self, data):
-		return data.replace("\r\n", "")
 		
 	def get_serial_port(self):
 		return self.serial

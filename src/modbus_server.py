@@ -22,25 +22,22 @@ def main():
 		
 		serial_reader = SerialReader("/dev/ttyACM0")  
 		
-		previous_temperature = 0
-		
-		state = [0]
-		
 		while True:
+			
 			data_from_serial_port = serial_reader.read_serial_data()
 			
-			if data_from_serial_port != "":
-				current_temperature = int(data_from_serial_port)
+			if data_from_serial_port != "":		
 				
-				if current_temperature != previous_temperature:
-					previous_temperature = current_temperature
+				split_parts = data_from_serial_port.strip().split(",")
 
-					DataBank.set_words(0, [current_temperature])
-							
-					if not state == DataBank.get_words(0):
-						state = DataBank.get_words(0)
-						print("value: " + str(state))
-						sleep(1)
+				temperature = int(split_parts[0])
+				lightLevel = int(split_parts[1])	
+				
+				DataBank.set_words(0, [temperature])
+				DataBank.set_words(1, [lightLevel])
+				print(f"temperature: {temperature}, light level: {lightLevel}")
+				
+				sleep(1)						
 				
 	except Exception as e:
 		server.stop();
