@@ -1,7 +1,8 @@
 # ------------------------------------------------------------------
 # IMPORTS
 # ------------------------------------------------------------------
-from time import sleep
+import os
+import time
 
 from decouple import config
 from pyModbusTCP.server import ModbusServer, DataBank
@@ -16,7 +17,10 @@ from serial_reader import SerialReader
 
 def main():
 	try:
-		server = ModbusServer(config("HOST", default = "127.0.0.1"), config("PORT", default = 502, cast = int), no_block = True)
+		HOST = os.getenv("IP", "127.0.0.1")
+		PORT = config("PORT", default = 502, cast = int)
+		print(f"HOST: {HOST}, PORT: {PORT}")
+		server = ModbusServer(HOST, PORT, no_block = True)
 		server.start()
 		print("Server is online...")
 		
@@ -37,7 +41,7 @@ def main():
 				DataBank.set_words(1, [lightLevel])
 				print(f"temperature: {temperature}, light level: {lightLevel}")
 				
-				sleep(1)						
+				time.sleep(1)						
 				
 	except Exception as e:
 		server.stop();
