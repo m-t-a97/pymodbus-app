@@ -1,13 +1,6 @@
-# ------------------------------------------------------------------
-# IMPORTS
-# ------------------------------------------------------------------
-
 import serial
 
-# ------------------------------------------------------------------
-
 class SerialReader:
-	
 	def __init__(self, port):	
 		self.port = port
 		self.baudrate = 115200
@@ -28,4 +21,3 @@ class SerialReader:
 		
 	def get_serial_port(self):
 		return self.serial
-
