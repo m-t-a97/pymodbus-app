@@ -5,14 +5,12 @@ from pyModbusTCP.server import DataBank
 from ..readers.serial_reader import SerialReader 
 
 class MicrobitController:
-	def __init__(self, serial_port, modbus_server):
+	def __init__(self, serial_port, modbus_client):
 		self.serial_port = serial_port
-		self.modbus_server = modbus_server
+		self.modbus_client = modbus_client
 		
 	def read_and_write_data(self):
 		try:
-			self.modbus_server.start()
-			
 			serial_reader = SerialReader(self.serial_port)  
 			
 			while True:
@@ -24,12 +22,10 @@ class MicrobitController:
 					temperature = int(split_parts[0])
 					lightLevel = int(split_parts[1])	
 					
-					DataBank.set_words(0, [temperature])
-					DataBank.set_words(1, [lightLevel])
+					self.modbus_client.write_multiple_registers(0, [temperature, lightLevel] )
 					print(f"temperature: {temperature}, light level: {lightLevel}")
 					
 					time.sleep(1)						
 				
 		except Exception as e:
-			self.modbus_server.stop()
 			print(e)
