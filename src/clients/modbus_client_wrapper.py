@@ -31,15 +31,15 @@ class ModbusClientWrapper(ModbusDao):
 	def write_multiple_registers(self, address, value):
 	  return self.__client.write_multiple_registers(address, value)
 	
-	def read_coils(self, address, value):
-	  return self.__client.read_coils(address, value)
+	def read_coils(self, address, quantity):
+	  return self.__client.read_coils(address, quantity)
 	
-	def read_discrete_inputs(self, address, value):
-	  return self.__client.read_discrete_inputs(address, value)
+	def read_discrete_inputs(self, address, quantity):
+	  return self.__client.read_discrete_inputs(address, quantity)
 	
-	def read_input_registers(self, address, value):
-	  return self.__client.read_input_registers(address, value)
+	def read_input_registers(self, address, quantity):
+	  return self.__client.read_input_registers(address, quantity)
 	
-	def read_holding_registers(self, address, value):
-	  return self.__client.read_holding_registers(address, value)
+	def read_holding_registers(self, address, quantity):
+	  return self.__client.read_holding_registers(address, quantity)
 		

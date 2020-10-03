@@ -8,7 +8,7 @@ class LedController:
     self.button = Button(button_pin)
     self.is_led_on = False
 
-  def run_led(self):
+  def execute(self):
     self.button.when_activated = self.toggle_led
     pause()
 

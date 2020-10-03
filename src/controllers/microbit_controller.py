@@ -9,7 +9,7 @@ class MicrobitController:
 		self.serial_port = serial_port
 		self.modbus_client = modbus_client
 		
-	def read_and_write_data(self):
+	def execute(self):
 		try:
 			serial_reader = SerialReader(self.serial_port)  
 			
