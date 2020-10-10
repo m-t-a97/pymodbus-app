@@ -11,55 +11,61 @@ host = os.getenv("IP", "127.0.0.1")
 port = config("PORT", default = 502, cast = int)
 modbus_server = ModbusServerWrapper().create_server(host, port)
 
-microbit_modbus_client = ModbusClientWrapper(host, port)
-led_modbus_client = ModbusClientWrapper(host, port)
-sensor_modbus_client = ModbusClientWrapper(host, port)
-distance_sensor_modbus_client = ModbusClientWrapper(host, port)
-
 def main():
 	try:
 		modbus_server.start()
-
-		microbit_modbus_client.open()
-		led_modbus_client.open()
-		sensor_modbus_client.open()
-		distance_sensor_modbus_client.open()
-
-		microbit_thread = Thread(target = run_microbit)
-		microbit_thread.start()
-		
-		led_thread = Thread(target = run_led)
-		led_thread.start()
-
-		sensor_thread = Thread(target = run_sensor)
-		sensor_thread.start()
-
-		distance_sensor_thread = Thread(target = run_distance_sensor)
-		distance_sensor_thread.start()
-
+		#create_and_run_thread(run_microbit)
+		#create_and_run_thread(run_led)
+		create_and_run_thread(run_sensor)
+		create_and_run_thread(run_distance_sensor)
 	except Exception as e:
 		modbus_server.stop()
-		microbit_modbus_client.close()
-		led_modbus_client.close()
-		sensor_thread.close()
-		distance_sensor_thread.close()
 		print(e) 
 
+def create_and_run_thread(target_function):
+		thread = Thread(target = target_function)
+		thread.start()
+
 def run_microbit():
-	microbit_serial_port = "/dev/ttyACM0"
-	microbit_controller = MicrobitController(microbit_serial_port, microbit_modbus_client)
-	microbit_controller.execute()
+	try:
+		modbus_client = create_and_get_new_modbus_client()
+		microbit_serial_port = "/dev/ttyACM0"
+		microbit_controller = MicrobitController(microbit_serial_port, modbus_client)
+		microbit_controller.execute()
+	except Exception as e:
+		modbus_client.close()
+		print(e)
 
 def run_led():
-	led_controller = LedController(led_modbus_client, 12, 25)
-	led_controller.execute()
+	try:
+		modbus_client = create_and_get_new_modbus_client()
+		led_controller = LedController(modbus_client, 12, 25)
+		led_controller.execute()
+	except Exception as e:
+		modbus_client.close()
+		print(e)
 
 def run_sensor():
-	sensor_controller = DHTSensorController(sensor_type = 11, pin = 4, modbus_client = sensor_modbus_client)
-	sensor_controller.execute()
+	try:
+		modbus_client = create_and_get_new_modbus_client()
+		sensor_controller = DHTSensorController(sensor_type = 11, pin = 4, modbus_client = modbus_client)
+		sensor_controller.execute()
+	except Exception as e:
+		modbus_client.close()
+		print(e)
 
 def run_distance_sensor():
-	distance_sensor_controller = DistanceSensorController(echo = 24, trigger = 23, modbus_client = distance_sensor_modbus_client)
-	distance_sensor_controller.execute()
+	try:
+		modbus_client = create_and_get_new_modbus_client()
+		distance_sensor_controller = DistanceSensorController(echo = 24, trigger = 23, modbus_client = modbus_client)
+		distance_sensor_controller.execute()
+	except Exception as e:
+		modbus_client.close()
+		print(e)
+
+def create_and_get_new_modbus_client():
+	modbus_client = ModbusClientWrapper(host, port)
+	modbus_client.open()
+	return modbus_client
 
 main()
