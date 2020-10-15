@@ -6,9 +6,9 @@ COPY requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV HOST = 192.168.0.118 \
+ENV HOST = 127.0.0.1 \
 	PORT = 10502
 
 COPY . ./
 
-CMD ["python", "./src/modbus_server.py"] 
+CMD ["python", "./app.py"] 

@@ -14,10 +14,10 @@ modbus_server = ModbusServerWrapper().create_server(host, port)
 def main():
 	try:
 		modbus_server.start()
-		#create_and_run_thread(run_microbit)
+		create_and_run_thread(run_microbit)
 		#create_and_run_thread(run_led)
-		create_and_run_thread(run_sensor)
-		create_and_run_thread(run_distance_sensor)
+		#create_and_run_thread(run_sensor)
+		#create_and_run_thread(run_distance_sensor)
 	except Exception as e:
 		modbus_server.stop()
 		print(e) 
